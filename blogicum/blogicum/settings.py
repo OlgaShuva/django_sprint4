@@ -1,10 +1,12 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-#r1f99e6(r8yo1g-n3j^99(ryy)x3z0th2s)6u@r)a*j@t_j0%'
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -23,8 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
-    'debug_toolbar',
-
     'pages.apps.PagesConfig',
     'blog.apps.BlogConfig',
 ]
@@ -37,8 +37,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
 
 ROOT_URLCONF = 'blogicum.urls'
 
